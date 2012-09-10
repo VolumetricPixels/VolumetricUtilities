@@ -1,0 +1,20 @@
+Coding Standards
+Mainly Oracle Coding Standards
+* if / for / while / switch statement: if (conditions) {
+* Method: public void method() {
+* No Tabs, Spaces only!
+* No trailing whitespace
+* Mid-statement newlines at a 150 column limit
+* camelCase, no under_scores except constants
+* Constants in full caps with underscores
+* Keep the same formatting style everywhere
+* Indents for switch statements
+* No code after case *: before a new line
+
+
+Pull Request Standards
+* Sign-off on all commits!
+* Finished product must compile and run!
+* No merges should be included in pull requests unless the pull request's purpose is a merge.
+* Number of commits in a pull request should be kept to *one commit* and all additional commits must be *squashed*. Pull requests that make multiple changes should have one commit per change.
+* Pull requests must include any applicable license headers. (These are generated when running `mvn`)
