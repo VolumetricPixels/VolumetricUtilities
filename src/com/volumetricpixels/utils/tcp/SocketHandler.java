@@ -5,13 +5,10 @@ import java.io.OutputStream;
 import java.net.Socket;
 import java.nio.ByteBuffer;
 
-import com.volumetricpixels.utils.tcp.event.MessageReceived;
+import com.volumetricpixels.utils.tcp.event.EventManager;
 import com.volumetricpixels.utils.tcp.event.MessageReceivedEvent;
-import com.volumetricpixels.utils.tcp.event.SocketConnected;
 import com.volumetricpixels.utils.tcp.event.SocketConnectedEvent;
-import com.volumetricpixels.utils.tcp.event.SocketDisconnected;
 import com.volumetricpixels.utils.tcp.event.SocketDisconnectedEvent;
-import com.volumetricpixels.utils.tcp.event.SocketHandlerReady;
 import com.volumetricpixels.utils.tcp.event.SocketHandlerReadyEvent;
 
 /**
@@ -25,29 +22,30 @@ public class SocketHandler extends Thread {
     private int messageSize = -1;
     private InputStream in;
     private OutputStream out;
-    private SocketConnected connected;
-    private SocketDisconnected disconnected;
-    private MessageReceived message;
-    private SocketHandlerReady ready;
+    private EventManager em;
     
     private byte[] buffer = new byte[4];
     private String hostName;
     private int id;
 
-    public SocketHandler() {
-        this.disconnected = new SocketDisconnected();
-        this.message = new MessageReceived();
-        this.connected = new SocketConnected();
-        this.ready = new SocketHandlerReady();
+    public SocketHandler(Server server) {
+        this.em = server.getEventManager();
+    }
+    
+    public SocketHandler(Client client) {
+        this.em = client.getEventManager();
     }
 
-    public SocketHandler(Socket sock, int id) {
+    public SocketHandler(Server server, Socket sock, int id) {
+        this(server);
         this.sock = sock;
         this.id = id;
-        this.connected = new SocketConnected();
-        this.disconnected = new SocketDisconnected();
-        this.message = new MessageReceived();
-        this.ready = new SocketHandlerReady();
+    }
+    
+    public SocketHandler(Client client, Socket sock, int id) {
+        this(client);
+        this.sock = sock;
+        this.id = id;
     }
 
     private void handleConnection() {
@@ -65,8 +63,8 @@ public class SocketHandler extends Thread {
                 return;
             }
 
-            ready.executeEvent(new SocketHandlerReadyEvent(this, this));
-            connected.executeEvent(new SocketConnectedEvent(this, this, id));
+            em.onSocketHandlerReady(new SocketHandlerReadyEvent(this, this));
+            em.onSocketConnected(new SocketConnectedEvent(this, this, id));
             startReading();
         } catch (Exception e) {
             e.printStackTrace();
@@ -113,7 +111,7 @@ public class SocketHandler extends Thread {
                 if (bytesReceived == messageSize) {
                     StringBuffer sb = new StringBuffer();
                     sb.append(new String(buffer));
-                    message.executeEvent(new MessageReceivedEvent(this, id, sb.toString()));
+                    em.onMessageReceived(new MessageReceivedEvent(this, id, sb.toString()));
 
                     bytesReceived = 0;
                     messageSize = -1;
@@ -154,7 +152,7 @@ public class SocketHandler extends Thread {
             sock.shutdownInput();
             sock.shutdownOutput();
             sock.close();
-            disconnected.executeEvent(new SocketDisconnectedEvent(this, id));
+            em.onSocketDisconnected(new SocketDisconnectedEvent(this, id));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -172,24 +170,12 @@ public class SocketHandler extends Thread {
         return hostName;
     }
 
-    public SocketConnected getConnected() {
-        return connected;
-    }
-
-    public SocketDisconnected getDisconnected() {
-        return disconnected;
-    }
-
-    public MessageReceived getMessage() {
-        return message;
+    public EventManager getEventManager() {
+        return em;
     }
 
     public Socket getSocket() {
         return sock;
-    }
-
-    public SocketHandlerReady getReady() {
-        return ready;
     }
 
     public void run() {

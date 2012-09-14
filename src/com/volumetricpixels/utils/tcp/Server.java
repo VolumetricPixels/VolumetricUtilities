@@ -6,12 +6,11 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.volumetricpixels.utils.tcp.event.ServerSocketAccepted;
+import com.volumetricpixels.utils.tcp.event.EmptyListener;
+import com.volumetricpixels.utils.tcp.event.EventManager;
 import com.volumetricpixels.utils.tcp.event.ServerSocketAcceptedEvent;
-import com.volumetricpixels.utils.tcp.event.ServerSocketStarted;
 import com.volumetricpixels.utils.tcp.event.ServerSocketStartedEvent;
 import com.volumetricpixels.utils.tcp.event.SocketHandlerReadyEvent;
-import com.volumetricpixels.utils.tcp.event.SocketHandlerReadyListener;
 
 /**
  * Server for DziNeIT's TCP socket library
@@ -24,27 +23,25 @@ public class Server extends Thread {
 
     private List<SocketHandler> handlers = new ArrayList<SocketHandler>();
     private ServerSocket server;
-    private ServerSocketStarted started;
-    private ServerSocketAccepted accepted;
+    private EventManager em;
 
     public Server(int port) {
         this.port = port;
-        this.started = new ServerSocketStarted();
-        this.accepted = new ServerSocketAccepted();
+        this.em = new EventManager();
     }
 
     private void startListening() {
         try {
             server = new ServerSocket(port);
-            started.executeEvent(new ServerSocketStartedEvent(this));
+            em.onServerSocketStarted(new ServerSocketStartedEvent(this));
             while (true) {
                 Socket sock = server.accept();
-                final SocketHandler handler = new SocketHandler(sock, ++counter);
+                final SocketHandler handler = new SocketHandler(this, sock, ++counter);
 
-                handler.getReady().addSocketHandlerReadyEventListener(new SocketHandlerReadyListener() {
+                em.registerListener(new EmptyListener() {
                             @Override
                             public void socketHandlerReady(SocketHandlerReadyEvent evt) {
-                                accepted.executeEvent(new ServerSocketAcceptedEvent(this, handler));
+                                em.onServerSocketAccepted(new ServerSocketAcceptedEvent(this, handler));
                             }
                         });
 
@@ -79,12 +76,8 @@ public class Server extends Thread {
         return handlers.get(index);
     }
 
-    public ServerSocketStarted getServerSocketStarted() {
-        return started;
-    }
-
-    public ServerSocketAccepted getSocketAccepted() {
-        return accepted;
+    public EventManager getEventManager() {
+        return em;
     }
 
     @Override

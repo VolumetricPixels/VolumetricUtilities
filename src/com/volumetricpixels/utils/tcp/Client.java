@@ -2,6 +2,8 @@ package com.volumetricpixels.utils.tcp;
 
 import java.net.Socket;
 
+import com.volumetricpixels.utils.tcp.event.EventManager;
+
 /**
  * Client for DziNeIT's TCP socket library
  *
@@ -9,9 +11,10 @@ import java.net.Socket;
  */
 public class Client {
     private Socket socket;
-    private SocketHandler handler = new SocketHandler();
+    private SocketHandler handler = new SocketHandler(this);
     private String host;
     private int port;
+    private EventManager em = new EventManager();
 
     public Client(String host, int port) {
         this.host = host;
@@ -43,5 +46,9 @@ public class Client {
 
     public Socket getSocket() {
         return socket;
+    }
+    
+    public EventManager getEventManager() {
+        return em;
     }
 }

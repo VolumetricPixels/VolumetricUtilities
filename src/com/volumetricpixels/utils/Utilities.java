@@ -21,4 +21,8 @@ public class Utilities {
             return null;
         }
     }
+    
+    public static String bytes2Str(byte[] bytes) {
+        return new String(bytes);
+    }
 }
