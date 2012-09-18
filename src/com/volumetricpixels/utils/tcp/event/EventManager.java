@@ -4,46 +4,46 @@ import java.util.ArrayList;
 import java.util.List;
 
 public final class EventManager {
-    private List<Listener> listeners = new ArrayList<Listener>();
+    private List<IListener> listeners = new ArrayList<IListener>();
 
-    public void registerListener(Listener listener) {
+    public void registerListener(IListener listener) {
         if (listener == null || listeners.contains(listener) == false) {
             listeners.add(listener);
         }
     }
 
     public void onMessageReceived(MessageReceivedEvent event) {
-        for (Listener l : listeners) {
+        for (IListener l : listeners) {
             l.messageReceived(event);
         }
     }
     
     public void onServerSocketAccepted(ServerSocketAcceptedEvent event) {
-        for (Listener l : listeners) {
+        for (IListener l : listeners) {
             l.serverSocketAccepted(event);
         }
     }
     
     public void onServerSocketStarted(ServerSocketStartedEvent event) {
-        for (Listener l : listeners) {
+        for (IListener l : listeners) {
             l.serverSocketStarted(event);
         }
     }
     
     public void onSocketConnected(SocketConnectedEvent event) {
-        for (Listener l : listeners) {
+        for (IListener l : listeners) {
             l.socketConnected(event);
         }
     }
     
     public void onSocketDisconnected(SocketDisconnectedEvent event) {
-        for (Listener l : listeners) {
+        for (IListener l : listeners) {
             l.socketDisconnected(event);
         }
     }
     
     public void onSocketHandlerReady(SocketHandlerReadyEvent event) {
-        for (Listener l : listeners) {
+        for (IListener l : listeners) {
             l.socketHandlerReady(event);
         }
     }

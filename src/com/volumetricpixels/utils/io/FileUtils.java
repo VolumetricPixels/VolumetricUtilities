@@ -168,7 +168,7 @@ public class FileUtils {
         return f.delete();
     }
 
-    public static OutputStream write(OutputStream writeTo, File readFrom) {
+    public static OutputStream writeToOS(OutputStream writeTo, File readFrom) {
         String s = null;
         BufferedReader br = null;
         try {
@@ -178,14 +178,10 @@ public class FileUtils {
             }
             br.close();
         } catch (IOException e) {
-            if (br != null) {
-                try {
-                    br.close();
-                } catch (IOException ignore) {
-                }
-            }
             e.printStackTrace();
             return null;
+        } finally {
+        	IOUtils.closeQuietly(br);
         }
         return writeTo;
     }

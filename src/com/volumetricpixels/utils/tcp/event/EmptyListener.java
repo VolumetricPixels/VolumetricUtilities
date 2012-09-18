@@ -6,7 +6,7 @@ package com.volumetricpixels.utils.tcp.event;
  *
  * @author DziNeIT
  */
-public abstract class EmptyListener implements Listener {
+public abstract class EmptyListener implements IListener {
     @Override
     public void messageReceived(MessageReceivedEvent evt) {
     }

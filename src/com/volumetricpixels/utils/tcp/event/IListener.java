@@ -5,7 +5,7 @@ package com.volumetricpixels.utils.tcp.event;
  *
  * @author DziNeIT
  */
-public interface Listener {
+public interface IListener {
     public void messageReceived(MessageReceivedEvent evt);
     
     public void socketDisconnected(SocketDisconnectedEvent evt);
