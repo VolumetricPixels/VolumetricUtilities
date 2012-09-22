@@ -9,8 +9,9 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.OutputStream;
-import java.io.PrintWriter;
 import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,7 +28,7 @@ public class FileUtils {
         return new File(path);
     }
 
-    public static void copyFile(File srcFile, File destFile, boolean preserveFileDate) throws IOException {
+    public static boolean copyFile(File srcFile, File destFile, boolean preserveFileDate) throws IOException {
         if (srcFile == null) {
             throw new NullPointerException("Source must not be null");
         }
@@ -55,10 +56,10 @@ public class FileUtils {
         if (destFile.exists() && destFile.canWrite() == false) {
             throw new IOException("Destination '" + destFile + "' exists but is read-only");
         }
-        doCopyFile(srcFile, destFile, preserveFileDate);
+        return doCopyFile(srcFile, destFile, preserveFileDate);
     }
 
-    private static void doCopyFile(File srcFile, File destFile, boolean preserveFileDate) throws IOException {
+    private static boolean doCopyFile(File srcFile, File destFile, boolean preserveFileDate) throws IOException {
         if (destFile.exists() && destFile.isDirectory()) {
             throw new IOException("Destination '" + destFile + "' exists but is a directory");
         }
@@ -92,6 +93,7 @@ public class FileUtils {
         if (preserveFileDate) {
             destFile.setLastModified(srcFile.lastModified());
         }
+        return true;
     }
 
     public static String getExtension(File f) {
@@ -128,17 +130,7 @@ public class FileUtils {
     }
 
     public static boolean clearContents(File f) {
-        createIfNotExists(f);
-
-        PrintWriter p = null;
-        try {
-            p = new PrintWriter(f);
-        } catch (FileNotFoundException e) {
-            return false;
-        }
-        p.write("");
-        p.close();
-        return true;
+        return delete(f) && createIfNotExists(f);
     }
 
     public static boolean createIfNotExists(File f) {
@@ -214,5 +206,33 @@ public class FileUtils {
 
     public static boolean exists(String file) {
         return findFile(file).exists();
+    }
+
+    public static void writeObjectToFile(File file, Object obj) {
+        try {
+            FileOutputStream fileOut = new FileOutputStream(file);
+            ObjectOutputStream out = new ObjectOutputStream(fileOut);
+            out.writeObject(obj);
+            out.close();
+            fileOut.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static Object readObjectFromFile(File file) {
+        try {
+            FileInputStream fileIn = new FileInputStream(file);
+            ObjectInputStream in = new ObjectInputStream(fileIn);
+            Object result = in.readObject();
+            in.close();
+            fileIn.close();
+            return result;
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

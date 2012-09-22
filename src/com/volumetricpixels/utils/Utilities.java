@@ -25,4 +25,13 @@ public class Utilities {
     public static String bytes2Str(byte[] bytes) {
         return new String(bytes);
     }
+
+    public static boolean intArrayContains(int[] removed, int index) {
+        for (int i : removed) {
+            if (i == index) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

@@ -1,11 +1,12 @@
 package com.volumetricpixels.utils.io;
 
+import java.io.Closeable;
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.OutputStream;
-import java.io.Reader;
-import java.io.Writer;
 import java.net.HttpURLConnection;
-import java.nio.channels.Channel;
 import java.sql.Connection;
 
 import javax.net.ssl.HttpsURLConnection;
@@ -20,43 +21,7 @@ public class IOUtils {
     private IOUtils() {
     }
 
-    public static void closeQuietly(Reader toClose) {
-        try {
-            if (toClose != null) {
-                toClose.close();
-            }
-        } catch (Exception e) {
-        }
-    }
-
-    public static void closeQuietly(Writer toClose) {
-        try {
-            if (toClose != null) {
-                toClose.close();
-            }
-        } catch (Exception e) {
-        }
-    }
-
-    public static void closeQuietly(Channel toClose) {
-        try {
-            if (toClose != null) {
-                toClose.close();
-            }
-        } catch (Exception e) {
-        }
-    }
-
-    public static void closeQuietly(InputStream toClose) {
-        try {
-            if (toClose != null) {
-                toClose.close();
-            }
-        } catch (Exception e) {
-        }
-    }
-
-    public static void closeQuietly(OutputStream toClose) {
+    public static void closeQuietly(Closeable toClose) {
         try {
             if (toClose != null) {
                 toClose.close();
@@ -90,5 +55,30 @@ public class IOUtils {
             }
         } catch (Exception e) {
         }
+    }
+
+    public static OutputStream writeObjectToOS(OutputStream os, Object obj) {
+        try {
+            ObjectOutputStream out = new ObjectOutputStream(os);
+            out.writeObject(obj);
+            out.close();
+        } catch (IOException i) {
+            i.printStackTrace();
+        }
+        return os;
+    }
+
+    public static Object readObjectFromIS(InputStream is) {
+        try {
+            ObjectInputStream in = new ObjectInputStream(is);
+            Object result = in.readObject();
+            in.close();
+            return result;
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }
