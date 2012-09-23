@@ -2,6 +2,13 @@ package com.volumetricpixels.utils.array;
 
 import com.volumetricpixels.utils.Utilities;
 
+/**
+ * Simple utility for easily controlling an Array when after-compilation array
+ * type doesn't matter too much.
+ * 
+ * @param <E>
+ *            The type of Array to store
+ */
 @SuppressWarnings("unchecked")
 public class ArrayManipulator<E> {
     private Object[] array;
