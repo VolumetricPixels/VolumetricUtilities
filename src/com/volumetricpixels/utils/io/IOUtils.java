@@ -12,8 +12,6 @@ import java.io.Serializable;
 import java.net.HttpURLConnection;
 import java.sql.Connection;
 
-import javax.net.ssl.HttpsURLConnection;
-
 /**
  * @author VolumetricPixels
  */
@@ -51,15 +49,6 @@ public class IOUtils {
         }
     }
 
-    public static void disconnect(HttpsURLConnection toClose) {
-        try {
-            if (toClose != null) {
-                toClose.disconnect();
-            }
-        } catch (Exception e) {
-        }
-    }
-
     public static OutputStream writeObjectToOS(OutputStream os, Object obj) {
         try {
             ObjectOutputStream out = new ObjectOutputStream(os);
@@ -68,6 +57,7 @@ public class IOUtils {
         } catch (IOException i) {
             i.printStackTrace();
         }
+
         return os;
     }
 
@@ -82,6 +72,7 @@ public class IOUtils {
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
+
         return null;
     }
 
