@@ -1,5 +1,7 @@
 package com.volumetricpixels.utils.io;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -12,6 +14,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
+import java.net.URL;
 import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.List;
@@ -174,7 +177,7 @@ public class FileUtils {
             e.printStackTrace();
             return null;
         } finally {
-        	IOUtils.closeQuietly(br);
+            IOUtils.closeQuietly(br);
         }
         return writeTo;
     }
@@ -207,6 +210,44 @@ public class FileUtils {
 
     public static boolean exists(String file) {
         return findFile(file).exists();
+    }
+
+    /**
+     * Download a File
+     * 
+     * @param url
+     * @param output
+     * @return the File that was downloaded
+     */
+    public static File downloadFile(URL url, File output) {
+        BufferedInputStream in = null;
+        BufferedOutputStream bout = null;
+        try {
+            in = new BufferedInputStream(url.openStream());
+            FileOutputStream fos = new FileOutputStream(output);
+            bout = new BufferedOutputStream(fos, 1024);
+            byte[] data = new byte[1024];
+            int x = 0;
+            while ((x = in.read(data, 0, 1024)) >= 0) {
+                bout.write(data, 0, x);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (bout != null) {
+                try {
+                    bout.close();
+                } catch (IOException ignore) {
+                }
+            }
+            if (in != null) {
+                try {
+                    in.close();
+                } catch (IOException ignore) {
+                }
+            }
+        }
+        return output;
     }
 
     public static void writeObjectToFile(File file, Object obj) {
