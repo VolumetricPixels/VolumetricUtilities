@@ -1,9 +1,7 @@
 package com.volumetricpixels.utils.tcp.event;
 
 /**
- * Listener for ALL events in DziNeIT's TCP sockets library
- *
- * @author DziNeIT
+ * Listener for all events in the TCP socket library
  */
 public interface IListener {
     public void messageReceived(MessageReceivedEvent evt);

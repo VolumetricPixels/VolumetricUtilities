@@ -6,7 +6,6 @@ Various utilities used by VolumetricPixels members, open for anyone to contribut
 ## Repo Rules - IMPORTANT:
 
 * Using @author is acceptable only when you have written an entire library or set of utilities that go together alone.
-* If the above does not apply, use @author VolumetricPixels in the JavaDoc.
 * JavaDocs are good but not necessary.
 * Generally follow the VP programming and formatting standards, as seen in guidelines.txt.
 

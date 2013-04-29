@@ -7,19 +7,16 @@ import com.volumetricpixels.utils.tcp.SocketHandler;
 @SuppressWarnings("serial")
 /**
  * Event fired when a socket handler is ready
- * in DziNeIT's TCP socket library
- *
- * @author DziNeIT
  */
 public class SocketHandlerReadyEvent extends EventObject {
-    private SocketHandler handler;
+	private SocketHandler handler;
 
-    public SocketHandlerReadyEvent(Object source, SocketHandler handler) {
-        super(source);
-        this.handler = handler;
-    }
+	public SocketHandlerReadyEvent(Object source, SocketHandler handler) {
+		super(source);
+		this.handler = handler;
+	}
 
-    public SocketHandler getHandler() {
-        return handler;
-    }
+	public SocketHandler getHandler() {
+		return handler;
+	}
 }

@@ -13,9 +13,7 @@ import com.volumetricpixels.utils.tcp.event.ServerSocketStartedEvent;
 import com.volumetricpixels.utils.tcp.event.SocketHandlerReadyEvent;
 
 /**
- * Server for DziNeIT's TCP socket library
- *
- * @author DziNeIT
+ * Server for TCP socket library
  */
 public class Server extends Thread {
     private int port;

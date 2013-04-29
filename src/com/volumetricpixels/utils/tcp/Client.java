@@ -5,9 +5,7 @@ import java.net.Socket;
 import com.volumetricpixels.utils.tcp.event.EventManager;
 
 /**
- * Client for DziNeIT's TCP socket library
- *
- * @author DziNeIT
+ * Client for TCP socket library
  */
 public class Client {
     private Socket socket;

@@ -4,25 +4,22 @@ import java.util.EventObject;
 
 @SuppressWarnings("serial")
 /**
- * Event fired when a message is received in
- * DziNeIT's TCP socket library
- *
- * @author DziNeIT
+ * Event fired when a message is received in the TCP socket library
  */
 public class MessageReceivedEvent extends EventObject {
-    private String message;
-    private int id;
+	private String message;
+	private int id;
 
-    public MessageReceivedEvent(Object source, int id, String message) {
-        super(source);
-        this.message = message;
-    }
+	public MessageReceivedEvent(Object source, int id, String message) {
+		super(source);
+		this.message = message;
+	}
 
-    public int getID() {
-        return id;
-    }
+	public int getID() {
+		return id;
+	}
 
-    public String getMessage() {
-        return message;
-    }
+	public String getMessage() {
+		return message;
+	}
 }

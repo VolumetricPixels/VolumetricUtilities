@@ -29,7 +29,6 @@ public class ArrayManipulator<E> {
                 return true;
             }
         }
-
         return false;
     }
 

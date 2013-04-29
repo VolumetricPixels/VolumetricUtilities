@@ -6,10 +6,7 @@ import com.volumetricpixels.utils.tcp.SocketHandler;
 
 @SuppressWarnings("serial")
 /**
- * Event fired when a socket is connected in
- * DziNeIT's TCP socket library
- *
- * @author DziNeIT
+ * Event fired when a socket is connected
  */
 public class SocketConnectedEvent extends EventObject {
     private int id;

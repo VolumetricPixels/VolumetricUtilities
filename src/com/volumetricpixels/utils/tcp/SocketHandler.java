@@ -12,9 +12,7 @@ import com.volumetricpixels.utils.tcp.event.SocketDisconnectedEvent;
 import com.volumetricpixels.utils.tcp.event.SocketHandlerReadyEvent;
 
 /**
- * SocketHandler for DziNeIT's TCP socket library
- *
- * @author DziNeIT
+ * SocketHandler TCP socket library
  */
 public class SocketHandler extends Thread {
     private Socket sock;

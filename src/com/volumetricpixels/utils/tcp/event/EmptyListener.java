@@ -3,8 +3,6 @@ package com.volumetricpixels.utils.tcp.event;
 /**
  * Abstract listener so people don't have to listen to
  * all events when they have a listener.
- *
- * @author DziNeIT
  */
 public abstract class EmptyListener implements IListener {
     @Override
